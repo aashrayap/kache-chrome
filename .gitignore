@@ -1,0 +1,8 @@
+node_modules/
+data/
+*.jsonl
+.env
+.env.*
+*-profile/
+.chrome-profile/
+.DS_Store
