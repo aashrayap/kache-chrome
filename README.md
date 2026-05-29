@@ -10,22 +10,25 @@ the page. The engine is generic — a new site is one small adapter.
 > back up the port to an outside script."*
 
 ```mermaid
-flowchart LR
+%%{init: {'themeVariables': {'fontSize': '20px'}, 'flowchart': {'nodeSpacing': 55, 'rankSpacing': 60}}}%%
+flowchart TB
     subgraph BROWSER["logged-in Chrome · throwaway profile"]
         APP["any site (X, …)<br/>fetches its own API"]
     end
 
-    subgraph ENGINE["capture/engine.js · generic"]
-        TAP["CDP tap +<br/>fetch monkey-patch"] --> DRIVE["scroll /<br/>paginate"] --> DEDUP["dedupe +<br/>accumulate"]
+    subgraph ENGINE["capture/engine.js · generic, site-agnostic"]
+        direction TB
+        TAP["CDP tap + fetch monkey-patch"] --> DRIVE["scroll / paginate"] --> DEDUP["dedupe + accumulate"]
     end
 
-    ADP["adapters/*.js<br/>match · targets · parse · id<br/>x ✓ · reddit ◌"]
+    ADP["adapters/*.js<br/>match · targets · parse · id<br/>(x ✓ · reddit ◌)"]
 
     APP -->|network JSON| TAP
     ADP -.->|configures| ENGINE
     DEDUP --> RAW[("data/raw/*.json")]
-    RAW --> PARSE["parse/<br/>normalize"] --> JSONL[("JSONL<br/>data/*.jsonl")]
-    JSONL --> DIGEST["digest/<br/>Markdown"]
+    RAW --> PARSE["parse/ → normalize"]
+    PARSE --> JSONL[("JSONL · data/*.jsonl")]
+    JSONL --> DIGEST["digest/ → Markdown"]
     JSONL -.->|feeds| USE["LLM · thesis engine · automation"]
     DEDUP -.->|"optional: act — drive page back, same port"| APP
 ```
