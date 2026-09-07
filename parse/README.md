@@ -14,4 +14,7 @@ The X adapter emits this record shape:
   subject's records unless `ALL=1`.
 
 Reruns add newly discovered IDs; existing IDs keep their previously stored
-values. The Reddit adapter's parser remains a placeholder and emits no records.
+values. Invalid JSON or missing, blank, or non-string IDs in existing history
+stop the run without replacing that file. Successful runs replace the output
+atomically with owner-only permissions. The Reddit adapter's parser remains a
+placeholder and emits no records.
