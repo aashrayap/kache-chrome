@@ -7,7 +7,8 @@
   "scripts": {
     "capture": "node capture/index.js",
     "parse": "node parse/index.js",
-    "digest": "node digest/index.js"
+    "digest": "node digest/index.js",
+    "test": "node --test"
   },
   "dependencies": {
     "chrome-remote-interface": "^0.33.3"
