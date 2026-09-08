@@ -29,7 +29,9 @@ const recs = (await readFile(SRC, "utf8"))
   .filter((r) => r.created_at && !isNaN(dt(r.created_at)));
 recs.sort((a, b) => dt(b.created_at) - dt(a.created_at));
 
-const dates = recs.map((r) => dt(r.created_at));
+const dateRange = recs.length
+  ? `${ymd(dt(recs.at(-1).created_at))} → ${ymd(dt(recs[0].created_at))}`
+  : "no dated records";
 const totalEng = recs.reduce((s, r) => s + eng(r), 0);
 const monthCounts = new Map();
 for (const r of recs) {
@@ -38,7 +40,7 @@ for (const r of recs) {
 }
 
 let md = `# @${slug} — ${adapter.name} digest\n\n`;
-md += `- **${recs.length}** records · ${ymd(new Date(Math.min(...dates)))} → ${ymd(new Date(Math.max(...dates)))}\n`;
+md += `- **${recs.length}** records · ${dateRange}\n`;
 md += `- ${totalEng.toLocaleString()} total engagement · ${Math.round(totalEng / (recs.length || 1)).toLocaleString()} avg\n`;
 md += `- source: \`data/${slug}.jsonl\` · regenerate: \`ADAPTER=${NAME} SUBJECT=${slug} npm run digest\`\n\n`;
 
